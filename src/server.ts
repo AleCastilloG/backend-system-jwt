@@ -8,6 +8,7 @@ import environments from './config/environments';
 import { DotenvConfigOutput } from 'dotenv/types';
 import cron from 'node-cron';
 import Database from './config/database';
+import expressPlayground from 'graphql-playground-middleware-express';
 
 if (process.env.NODE_ENV !== 'production') {
 	// para leer las variables de entorno
@@ -38,6 +39,13 @@ async function init(): Promise<void> {
 	});
 
 	server.applyMiddleware({ app });
+
+	app.use(
+		'/',
+		expressPlayground({
+			endpoint: '/graphql',
+		})
+	);
 
 	const PORT: number | string = process.env.PORT || 5300;
 	const httpServer: Server = createServer(app);
